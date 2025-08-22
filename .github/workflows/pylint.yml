@@ -1,0 +1,29 @@
+name: Python Lint
+
+# Trigger this workflow for pull requests targeting the main branch.
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  pylint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        # Install project dependencies if requirements.txt exists, then install pylint.
+        run: |
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install pylint
+
+      - name: Run pylint
+        # Lint all tracked Python files; --exit-zero ensures lint messages don’t fail the build.
+        run: |
+          pylint $(git ls-files '*.py') --exit-zero
