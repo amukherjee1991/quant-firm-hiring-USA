@@ -3,7 +3,9 @@ name: Python Lint
 # Trigger this workflow for pull requests targeting the main branch.
 on:
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
+      - development
 
 jobs:
   pylint:
