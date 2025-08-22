@@ -1,3 +1,5 @@
+#pylint: disable=missing-function-docstring,line-too-long
+#pylint: disable=unused-import,unused-variable
 """
 update_csv.py
 
@@ -21,13 +23,12 @@ the current directory.
 
 import csv
 import re
-import requests
 from pathlib import Path
+import requests
+
 
 # URL of the raw gist containing the list of firms.
-GIST_RAW_URL = (
-    "https://gist.githubusercontent.com/chrisaycock/8b7a37b1f97549517cb7789be5b06266/raw/firms.md"
-)
+GIST_RAW_URL = "https://gist.githubusercontent.com/chrisaycock/8b7a37b1f97549517cb7789be5b06266/raw/firms.md"
 
 # Mapping of firm names to (US-based, Hiring) status.  True means "Yes", False
 # means "No", and None means "Unknown".  Extend this mapping as more
@@ -60,6 +61,7 @@ STATUS_MAPPING = {
     "Trexquant Investment": (True, True),
 }
 
+
 def fetch_gist() -> str:
     """Download the raw gist content and return it as a string."""
     response = requests.get(GIST_RAW_URL, timeout=30)
@@ -85,12 +87,14 @@ def write_csv(firms, filename="all_firms.csv"):
         for name, url in firms:
             status = STATUS_MAPPING.get(name, (None, None))
             us_based, hiring = status
+
             def fmt(value):
                 if value is True:
                     return "Yes"
                 if value is False:
                     return "No"
                 return "Unknown"
+
             writer.writerow([name, url, fmt(us_based), fmt(hiring)])
     print(f"CSV written to {filename}")
 
